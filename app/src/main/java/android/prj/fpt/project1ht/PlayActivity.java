@@ -356,8 +356,8 @@ public class PlayActivity extends AppCompatActivity {
     public void alertCompleteGame() {
         alertSound(2);
         Dialog dialog = new Dialog(this);
-        dialog.setTitle("Complete Level");
-        dialog.setContentView(R.layout.custom_dialog_complete_game);
+        dialog.setTitle("Complete Lesson");
+        dialog.setContentView(R.layout.custom_dialog_complete);
         dialog.setCanceledOnTouchOutside(false); // not permit to touch outside
         TextView scoreRef = (TextView) dialog.findViewById(R.id.tv_cus_Score);
         TextView countRightRef = (TextView) dialog.findViewById(R.id.tv_cus_CountRight);

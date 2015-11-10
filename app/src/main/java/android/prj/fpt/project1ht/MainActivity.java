@@ -14,13 +14,17 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
+import com.facebook.share.Sharer;
 import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.widget.ShareDialog;
 
@@ -35,10 +39,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        FacebookSdk.sdkInitialize(getApplicationContext());
-        callbackManager = CallbackManager.Factory.create();
-        shareDialog = new ShareDialog(this);
-
+        initFB();
         setContentView(R.layout.activity_main);
         btnPlay = (Button) findViewById(R.id.buttonPlay);
         btnLoad = (Button) findViewById(R.id.buttonLoad);
@@ -89,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     final Dialog dialog = new Dialog(MainActivity.this);
                     dialog.setTitle("Load Game");
-                    dialog.setContentView(R.layout.custom_dialog_load_game);
+                    dialog.setContentView(R.layout.custom_dialog_load);
                     TextView time = (TextView) dialog.findViewById(R.id.tv_cus_InfoSavedGame_Time);
                     TextView position = (TextView) dialog.findViewById(R.id.tv_cus_InfoSavedGame_Position);
                     time.setText(getInfoSaveGame("time"));
@@ -152,6 +153,28 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 btnQuit.startAnimation(animClick);
                 finish();
+            }
+        });
+    }
+
+    public void initFB(){
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        callbackManager = CallbackManager.Factory.create();
+        shareDialog = new ShareDialog(this);
+        shareDialog.registerCallback(callbackManager, new FacebookCallback<Sharer.Result>() {
+            @Override
+            public void onSuccess(Sharer.Result result) {
+          
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+                PlayActivity.showToast(MainActivity.this,"Please check network connection !");
             }
         });
     }

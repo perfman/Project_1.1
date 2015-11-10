@@ -17,9 +17,9 @@
             android:layout_height="wrap_content"
             android:id="@+id/textViewTitle"
             android:text="Smart Listening"
-            android:textSize="45dp"
+            android:textSize="48dp"
             android:layout_marginTop="15dp"
-            android:textColor="#e03d3e8b"
+            android:textColor="#027CC0"
             android:textStyle="bold"
             android:gravity="center_horizontal" />
 
