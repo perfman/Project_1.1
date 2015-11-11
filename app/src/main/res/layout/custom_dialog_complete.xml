@@ -35,7 +35,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_marginBottom="8dp">
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -65,13 +66,16 @@
             android:layout_height="wrap_content"
             android:id="@+id/btn_cus_Home"
             android:text="Home"
-            android:textColor="@color/colorAccent"/>
+            android:textColor="@color/colorAccent"
+            android:background="@drawable/sys_dialog"
+            android:layout_marginRight="8dp"/>
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/btn_cus_Replay"
             android:text="Replay"
-            android:textColor="@color/colorAccent"/>
+            android:textColor="@color/colorAccent"
+            android:background="@drawable/sys_dialog"/>
     </LinearLayout>
 
 </LinearLayout>
