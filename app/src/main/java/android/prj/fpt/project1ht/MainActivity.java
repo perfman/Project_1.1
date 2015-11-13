@@ -14,11 +14,11 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -32,9 +32,11 @@ public class MainActivity extends AppCompatActivity {
     Button btnPlay, btnLoad, btnHelp, btnQuit;
     TextView tvTitle;
     Animation animClick;
-    MediaPlayer mpClick;
+    MediaPlayer mpClick, mpBg;
     CallbackManager callbackManager;
     ShareDialog shareDialog;
+    Menu mOptionMenu;
+    boolean toogleMusic = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +56,18 @@ public class MainActivity extends AppCompatActivity {
         showHelp();
         quitGame();
         customFont();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        playBackgroundMusic();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mpBg.stop();
     }
 
     public void playGame() {
@@ -142,7 +156,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 btnHelp.startAnimation(animClick);
                 playSoundClick();
-                startActivity(new Intent(MainActivity.this,HelpActivity.class));
+                startActivity(new Intent(MainActivity.this, HelpActivity.class));
             }
         });
     }
@@ -164,7 +178,7 @@ public class MainActivity extends AppCompatActivity {
         shareDialog.registerCallback(callbackManager, new FacebookCallback<Sharer.Result>() {
             @Override
             public void onSuccess(Sharer.Result result) {
-          
+
             }
 
             @Override
@@ -174,7 +188,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onError(FacebookException error) {
-                PlayActivity.showToast(MainActivity.this,"Please check network connection !");
+                PlayActivity.showToast(MainActivity.this, "Please check network connection !");
             }
         });
     }
@@ -182,7 +196,7 @@ public class MainActivity extends AppCompatActivity {
     public void shareFB(){
         if (ShareDialog.canShow(ShareLinkContent.class)) {
             ShareLinkContent linkContent = new ShareLinkContent.Builder()
-                    .setContentTitle("Smart Listening")
+                    .setContentTitle("Smart Listening®")
                     .setContentDescription("Phần mềm luyện nghe tiếng Anh bằng hình ảnh trên Android")
                     .setContentUrl(Uri.parse("https://www.dropbox.com/s/z12nih6yapjln0r/smart%20listening.apk?dl=0"))
                     .setImageUrl(Uri.parse("https://lh3.googleusercontent.com/-GTItp-6tnJQ/VkCCnO70DsI/AAAAAAAAAhg/laOGLv6awCI/s64-Ic42/sys_logo.png"))
@@ -226,9 +240,16 @@ public class MainActivity extends AppCompatActivity {
         builder.show();
     }
 
+    public void playBackgroundMusic(){
+        mpBg = MediaPlayer.create(this,R.raw.sys_bgmusic);
+        mpBg.setLooping(true);
+        mpBg.start();
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        mOptionMenu = menu;
         return true;
     }
 
@@ -244,7 +265,16 @@ public class MainActivity extends AppCompatActivity {
             case R.id.itemFacebook:
                 shareFB();
                 break;
-            case R.id.itemSetting:
+            case R.id.itemSpeaker:
+                if(toogleMusic){
+                    mOptionMenu.findItem(R.id.itemSpeaker).setIcon(R.drawable.sys_actionbar_mute);
+                    mpBg.stop();
+                    toogleMusic = false;
+                }else{
+                    mOptionMenu.findItem(R.id.itemSpeaker).setIcon(R.drawable.sys_actionbar_speaker);
+                    playBackgroundMusic();
+                    toogleMusic = true;
+                }
                 break;
             case R.id.itemInfo:
                 showInfo(MainActivity.this);
